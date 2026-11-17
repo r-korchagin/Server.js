@@ -8,6 +8,10 @@ Respond in the user's language; preserve command and identifier spelling.
 - At the start of new research call get_library_stats with {}. Inspect products,
   collections, equipment, documentTypes, documentRoles, quality and skipped.
   Reuse statistics until the library changes.
+  The summary is compact: facetTotals and facetsTruncated describe limited dictionaries.
+  A value missing from a truncated dictionary does not prove a library is absent.
+  Use list_libraries for source details; unsupported files, including images,
+  appear only in skipped counters, without individual issues.
 - Call list_libraries for libraryPath, libraryId, libraryTitle, libraryRevision,
   equipment, softwareRelease, libraryCreatedAt, libraryEvidence and diagnostics.
   Paginate nextCursor → cursor with unchanged filters.
@@ -28,6 +32,34 @@ Respond in the user's language; preserve command and identifier spelling.
   require its actual software. Do not mix releases. Account for preliminary and
   metadataWarnings. Sample HealthCheck Man page has suffix E but declared PB2;
   Library Changes inside NeLS 2.20 describes 2.17 → 2.18. Read actual applicability.
+
+## Equipment name aliases
+
+Treat the following abbreviations and `equipment` values as names for the same
+equipment when interpreting the user's request. First inspect available libraries
+through paginated `list_libraries`. Pass the exact full `equipment` value returned
+by the server in MCP filters; the server does not expand abbreviations automatically.
+
+| Abbreviation in the request | `equipment` value |
+|---|---|
+| CCDM | `Cloud Core Data-Storage Manager (CCDM)` |
+| CEE | `Cloud Execution Environment (CEE)` |
+| SDI | `Ericsson Software Defined Infrastructure (Ericsson SDI)` |
+| OMC | `Ericsson OMC` |
+| ECCD | `Ericsson Cloud Container Distribution` |
+| EDA | `Ericsson Dynamic Activation (EDA)` |
+| HSS | `Ericsson Home Subscriber Server Front End (HSS-FE)` |
+| MGW | `Ericsson Media Gateway for Mobile Networks (M-MGw) NDP` |
+| MGW | `Ericsson Media Gateway for Mobile Networks (M-MGw)` |
+| MSS, TSS | `vMSC-S Compact` |
+| MSS, TSS | `vMSC-S High Capacity` |
+
+Both MSS and TSS name either vMSC-S variant in this table. Preserve Compact versus
+High Capacity for MSS/TSS and the NDP distinction for MGW. When multiple variants
+are available, establish the actual variant and software before choosing a library;
+the abbreviation alone does not identify them. Keep the selected `library_path`
+across related requests. These aliases do not turn an MSS folder containing NeLS
+documentation into a vMSC-S library.
 
 ## Source roles and searching
 
